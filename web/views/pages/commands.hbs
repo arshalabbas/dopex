@@ -1,0 +1,11 @@
+<section>
+    <div class="container">
+        <h1 class="text-white">Commands</h1>
+        {{#each list}}
+        <p>
+            <a href="/command?category={{this.category}}" role="button">
+                {{this.category}}
+            </a>
+        {{/each}}
+    </div>
+</section>
