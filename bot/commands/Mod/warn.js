@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const { colors } = require('../../utils/tools');
 
 module.exports.run = (bot, message, args) => {
-    const properUsage = `Proper Usage: \`${bot.config.PREFIX}warn <user> <reason>\``
+    const properUsage = `Proper Usage: \`${bot.config.PREFIX} warn <user> <reason>\``
     if (!args.length) return message.reply(properUsage);
 
     const user = message.mentions.users.first();

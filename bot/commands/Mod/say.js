@@ -18,5 +18,6 @@ module.exports.help = {
     name: "say",
     description: "To send something with me.",
     permission: ["MANAGE_MESSAGES"],
+    usage: "<content>",
     category: "Mod"
 }

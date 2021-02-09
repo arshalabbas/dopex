@@ -22,9 +22,9 @@ module.exports.run = async (bot, message, args) => {
         broadcast.play(tts.getVoiceStream(content));
         const dispatcher = connection.play(broadcast);
 
-        dispatcher.on('finish', async () => {
+        setTimeout(async () => {
             await channel.leave();
-        });
+        }, 15000);
     });
 }
 

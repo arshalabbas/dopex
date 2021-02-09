@@ -36,7 +36,7 @@ module.exports.run = (bot, message, args) => {
 	embed.setDescription([
 		`Available commands for ${bot.user.username}.`,
 		`The bot prefix is **${bot.config.PREFIX}**`,
-		`Try \`${bot.config.PREFIX}help (command)\` for more info on a specific command.`,
+		`Try \`${bot.config.PREFIX} help (command)\` for more info on a specific command.`,
 		"`<>`means needed and `()` it is optional but don't include those.",
 	].join("\n"));
 	categories.forEach(category => {

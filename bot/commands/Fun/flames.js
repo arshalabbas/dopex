@@ -28,19 +28,19 @@ module.exports.run = (bot, message, args) => {
         }
     }
 
-    function checkFl(give, name) {
+    function checkFl(give, name, author) {
         if (give === 'friends') {
-            return `🤗 **${name} is your Friend** 🤗`;
+            return `🤗 **${name} is ${author}'s Friend** 🤗`;
         } else if (give === 'lover') {
-            return `💗 **${name} loves you** 💗`;
+            return `💗 **${name} loves ${author}** 💗`;
         } else if (give === 'affection') {
-            return `💖 **${name} attracted towards you** 💖`;
+            return `💖 **${name} attracted towards ${author}** 💖`;
         } else if (give === 'marriage') {
-            return `💍 **You will get Married to ${name}** 💍`
+            return `💍 **${author} will get Married to ${name}** 💍`
         } else if (give === 'enemy') {
-            return `👿 **${name} is your sworn Enemy** 👿`
+            return `👿 **${name} is ${author}'s sworn Enemy** 👿`
         } else if (give === 'sister') {
-            return `👧 **${name} is your sister** 👧`;
+            return `👧 **${name} is ${author}'s sister** 👧`;
         }
     }
 
@@ -49,16 +49,16 @@ module.exports.run = (bot, message, args) => {
         if (mention) {
             const name = mention.username;
             flames(message.author.username, name, (result) => {
-                const final = checkFl(result, name)
-                message.reply(final);
+                const final = checkFl(result, name, message.author.username);
+                message.channel.send(final);
             }, err => {
                 message.reply("😑 The given names are same");
             });
         } else {
             const name = args.join(" ");
             flames(message.author.username, name, (result) => {
-                const final = checkFl(result, name)
-                message.reply(final);
+                const final = checkFl(result, name, message.author.name);
+                message.channel.send(final);
             }, err => {
                 message.reply("😑 The given names are same");
             });
@@ -73,8 +73,8 @@ module.exports.run = (bot, message, args) => {
         const user2 = userMention(mention2);
 
         flames(user1, user2, result => {
-            const final = checkFl(result, user2);
-            message.reply(final);
+            const final = checkFl(result, user2, user1);
+            message.channel.send(final);
         }, err => {
             message.reply("😑 The given names are same");
         });

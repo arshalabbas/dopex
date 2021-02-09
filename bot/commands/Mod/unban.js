@@ -13,7 +13,7 @@ module.exports.run = (bot, message, args) => {
         if (!args.length) {
             const listEmb = new MessageEmbed()
                 .setTitle(`${message.guild.name}'s Banned Members list`)
-                .setDescription(`use \`${bot.config.PREFIX}unban (index)\` to unban.`)
+                .setDescription(`use \`${bot.config.PREFIX} unban (index)\` to unban.`)
                 .setColor(colors[Math.floor(Math.random() * colors.length)])
                 .setTimestamp();
             list.forEach(unban => {
