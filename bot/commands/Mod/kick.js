@@ -1,10 +1,12 @@
 const { MessageEmbed } = require('discord.js');
+const { getPrefix } = require('../../Database/prefixes');
 const { colors } = require('../../utils/tools');
 
 module.exports.run = async (bot, message, args) => {
+    const prefix = getPrefix(message.guild.id) || bot.config.PREFIX;
     const user = message.mentions.users.first();
         const member = message.guild.member(user);
-        const missMsg = `mention a user to kick!\nUsage: \`${bot.config.PREFIX} kick <user> (reason)\``;
+        const missMsg = `mention a user to kick!\nUsage: \`${prefix} kick <user> (reason)\``;
         if (!args.length) return message.reply(missMsg);
         if (!user) return message.reply(missMsg);
         if (!member) return message.reply("The mentioned user is not in this guild.");

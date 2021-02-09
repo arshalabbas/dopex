@@ -1,5 +1,8 @@
-module.exports.run = (bot, message, args) => {
-    if(!args.length) return message.reply(`give a message after this command.\neg: \`${bot.config.PREFIX}say hello\``)
+const { getPrefix } = require("../../Database/prefixes");
+
+module.exports.run = async (bot, message, args) => {
+    const prefix = await getPrefix(message.guild.id) || bot.config.PREFIX;
+    if(!args.length) return message.reply(`give a message after this command.\neg: \`${prefix}say hello\``)
         .then(msg => {
             msg.delete({ timeout: 3000 });
         });

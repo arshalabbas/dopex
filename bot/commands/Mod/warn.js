@@ -1,8 +1,10 @@
 const { MessageEmbed } = require('discord.js');
+const { getPrefix } = require('../../Database/prefixes');
 const { colors } = require('../../utils/tools');
 
-module.exports.run = (bot, message, args) => {
-    const properUsage = `Proper Usage: \`${bot.config.PREFIX} warn <user> <reason>\``
+module.exports.run = async (bot, message, args) => {
+    const prefix = await getPrefix(message.guild.id) || bot.config.PREFIX;
+    const properUsage = `Proper Usage: \`${prefix} warn <user> <reason>\``
     if (!args.length) return message.reply(properUsage);
 
     const user = message.mentions.users.first();

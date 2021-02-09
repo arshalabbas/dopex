@@ -3,7 +3,9 @@ const { readdirSync } = require("fs");
 const { colors } =require('../../utils/tools');
 const { join } = require('path');
 const { dir } = require('../../index');
-module.exports.run = (bot, message, args) => {
+const { getPrefix } = require("../../Database/prefixes");
+module.exports.run = async (bot, message, args) => {
+	const prefix = await getPrefix(message.guild.id) || bot.config.PREFIX;
 	const color = colors[Math.floor(Math.random() * colors.length)];
 	const embed = new MessageEmbed()
 		.setColor(color)
@@ -19,13 +21,13 @@ module.exports.run = (bot, message, args) => {
 		else if (bot.aliases.has(command)) {
 			cmd = bot.commands.get(bot.aliases.get(command));
 		}
-		if(!cmd) return message.channel.send(embed.setTitle("Invalid Command.").setDescription(`Do \`${bot.config.PREFIX}help\` for the list of the commands.`));
+		if(!cmd) return message.channel.send(embed.setTitle("Invalid Command.").setDescription(`Do \`${prefix} help\` for the list of the commands.`));
 		command = cmd.help;
 		embed.setTitle(`${command.name.slice(0, 1).toUpperCase() + command.name.slice(1)} command help`);
 		embed.setDescription([
 			`❯ **Command:** ${command.name.slice(0, 1).toUpperCase() + command.name.slice(1)}`,
 			`❯ **Description:** ${command.description || "No Description provided."}`,
-			`❯ **Usage:** ${command.usage ? `\`${bot.config.PREFIX} ${command.name} ${command.usage}\`` : "No Usage"} `,
+			`❯ **Usage:** ${command.usage ? `\`${prefix} ${command.name} ${command.usage}\`` : "No Usage"} `,
 			`❯ **Aliases:** ${command.aliases ? command.aliases.join(", ") : "None"}`,
 			`❯ **Category:** ${command.category ? command.category : "General" || "Misc"}`,
 		].join("\n"));
@@ -35,8 +37,8 @@ module.exports.run = (bot, message, args) => {
 	const categories = readdirSync(join(dir, "commands"));
 	embed.setDescription([
 		`Available commands for ${bot.user.username}.`,
-		`The bot prefix is **${bot.config.PREFIX}**`,
-		`Try \`${bot.config.PREFIX} help (command)\` for more info on a specific command.`,
+		`The bot prefix is **${prefix}**`,
+		`Try \`${prefix} help (command)\` for more info on a specific command.`,
 		"`<>`means needed and `()` it is optional but don't include those.",
 	].join("\n"));
 	categories.forEach(category => {

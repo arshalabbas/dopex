@@ -7,6 +7,8 @@
   },
   "dependencies": {
     "@discordjs/opus": "^0.4.0",
+    "@keyv/mongo": "^1.1.0",
+    "@keyv/sqlite": "^2.0.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "discord-emotes": "^1.5.3",
