@@ -2,7 +2,7 @@ const { MONGO_DB } = require('../utils/keysExport');
 
 const Keyv = require('keyv');
 
-const prefixes = new Keyv(`sqlite://${__dirname}/prefixdb.sqlite`);
+const prefixes = new Keyv(MONGO_DB);
 
 prefixes.on('error', err => console.log(`Can't able to connect Database\n${err}`));
 

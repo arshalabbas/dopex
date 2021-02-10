@@ -8,7 +8,6 @@
   "dependencies": {
     "@discordjs/opus": "^0.4.0",
     "@keyv/mongo": "^1.1.0",
-    "@keyv/sqlite": "^2.0.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "discord-emotes": "^1.5.3",
@@ -19,6 +18,7 @@
     "express": "~4.16.1",
     "express-handlebars": "^5.2.0",
     "ffmpeg-static": "^4.2.7",
+    "giphy-js-sdk-core": "^1.0.6",
     "got": "^11.8.1",
     "hbs": "^4.1.1",
     "http-errors": "~1.6.3",
