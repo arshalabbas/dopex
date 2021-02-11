@@ -54,7 +54,7 @@ body {
     background-color: #2C2F33 !important
 }
 .heading {
-    padding: 160px 50px !important;
+    padding: 100px 50px !important;
     color: #fff !important;
     background-image: url("../assets/wavy-purple-by-nouridio.svg") !important;
     background-position: bottom !important;
@@ -78,7 +78,7 @@ body {
 .features {
     text-align: center !important;
     background: #f06e76 !important;
-    padding: 60px 50px !important;
+    padding: 40px 50px !important;
     background-image: url("../assets/wavy-dark-by-nouridio.svg") !important;
     background-position: bottom !important;
     background-size: 200% !important;

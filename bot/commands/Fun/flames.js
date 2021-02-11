@@ -57,7 +57,7 @@ module.exports.run = (bot, message, args) => {
         } else {
             const name = args.join(" ");
             flames(message.author.username, name, (result) => {
-                const final = checkFl(result, name, message.author.name);
+                const final = checkFl(result, name, message.author.username);
                 message.channel.send(final);
             }, err => {
                 message.reply("😑 The given names are same");
@@ -72,8 +72,15 @@ module.exports.run = (bot, message, args) => {
         const user1 = userMention(mention1);
         const user2 = userMention(mention2);
 
+        let author;
+
+        if(!user1) {
+            author = message.author.username;
+        } else {
+            author = user1;
+        }
         flames(user1, user2, result => {
-            const final = checkFl(result, user2, user1);
+            const final = checkFl(result, user2, author);
             message.channel.send(final);
         }, err => {
             message.reply("😑 The given names are same");
