@@ -8,9 +8,9 @@ module.exports.run = (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: "8ball",
+    name: "eightball",
     description: "Ask a question and get an answer!",
-    aliases: ["ask", "8b"],
+    aliases: ["8ball","ask", "8b"],
     usage: "<question>",
     category: "Fun"
 }
