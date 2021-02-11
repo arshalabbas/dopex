@@ -1,6 +1,24 @@
 module.exports.colors = ["#050505", "#f36c74", "#6c494c", "#ab5659", "#2e2729", "#cb6c6d", "#383636", "#f7f7f7", "#868586", "#c5a8ab"];
 module.exports.emojies = ["🥰", "🎉", "💖", "💞", "💓", "💕", "💘"];
 module.exports.truthEmoji = ["👀", "🙄", "😜", "😶", "🤐", "🤭", "🙈", "🙊", "🙉"];
+module.exports.rolling = "<a:diceRoll:809316052001226764>";
+module.exports.expressions = ["Wow...", "Hurray!", "Nice!", "Oh My...", "Aw...", "Awesome!", "Perfect!", "Lucky!"];
+
+module.exports.rollEmoji = (number) => {
+    if (number == '1') {
+        return "<:dice1:809316446907793449>";
+    } else if (number == '2') {
+        return "<:dice2:809316489000648734>";
+    } else if (number == '3') {
+        return "<:dice3:809316536896585728>";
+    } else if (number == '4') {
+        return "<:dice4:809316570043121674>";
+    } else if (number == '5') {
+        return "<:dice5:809316594097717269>"
+    } else if (number == '6') {
+        return "<:dice6:809316618915151893>"
+    }
+}
 
 const os = require('os');
 
