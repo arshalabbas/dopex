@@ -210,11 +210,3 @@ color: rgba(255, 255, 255, 0.46) !important
     width: 100%;
     height: 100%;
 }
-
-.dopex-logo {
-    width: 60%;
-    height: auto;
-    top: 50%;
-    left: 50%;
-    transform: translate(15%, 8%);
-}

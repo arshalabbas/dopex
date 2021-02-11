@@ -36,9 +36,9 @@ module.exports.run = (bot, message, args) => {
         } else if (give === 'affection') {
             return `💖 **${name} attracted towards ${author}** 💖`;
         } else if (give === 'marriage') {
-            return `💍 **${author} will get Married to ${name}** 💍`
+            return `💍 **${author} will get Married to ${name}** 💍`;
         } else if (give === 'enemy') {
-            return `👿 **${name} is ${author}'s sworn Enemy** 👿`
+            return `👿 **${name} is ${author}'s sworn Enemy** 👿`;
         } else if (give === 'sister') {
             return `👧 **${name} is ${author}'s sister** 👧`;
         }
