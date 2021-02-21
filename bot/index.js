@@ -14,6 +14,9 @@ let commandNumber = [];
 module.exports.run = () => {
     client.snipes = new Collection();
     client.config = config;
+    client.phone = new Collection();
+    client.caller = new Collection();
+    client.callConnection = new Collection();
 
     ["commands", "aliases"].forEach(x => client[x] = new Collection());
 

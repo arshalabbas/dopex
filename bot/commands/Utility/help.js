@@ -47,6 +47,7 @@ module.exports.run = async (bot, message, args) => {
 
 		try {
 			if (dir.size === 0) return;
+			if (bot.config.OWNER === message.author.id) embed.addField(`❯ ${capitalise}`, dir.map(c => `\`${c.help.name}\``).join(", "));
 			else if (category !== "Developer") embed.addField(`❯ ${capitalise}`, dir.map(c => `\`${c.help.name}\``).join(", "));
 		}
 		catch (e) {

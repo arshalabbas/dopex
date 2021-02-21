@@ -7,9 +7,17 @@ var hbs = require('express-handlebars');
 var bot = require('./bot/index');
 var usersRouter = require('./web/routes/users');
 var adminRouter = require('./web/routes/admin');
+var db = require('./bot/Database/configDB');
 bot.run();
 var app = express();
 
+db.connect(err => {
+  if (err) {
+    console.log("Database connection error");
+  } else {
+    console.log("Connection to database successfull");
+  }
+})
 // view engine setup
 app.set('views', path.join(__dirname, 'web', 'views'));
 app.set('view engine', 'hbs');
