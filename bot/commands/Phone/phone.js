@@ -133,6 +133,14 @@ module.exports.run = async (bot, message) => {
                 function callFunction(reciever) {
                     const channel1 = bot.channels.cache.get(message.channel.id);
                     const channel2 = bot.channels.cache.get(reciever);
+
+                    const card = {
+                        name: channel2.guild.name,
+                        channelID: channel2.id
+                    }
+
+                    bot.lastContact.set(message.author.id, card);
+
                     status = true;
                     collector.stop();
                     phoneEmb.setTitle("Ringing...");

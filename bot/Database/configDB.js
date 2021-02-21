@@ -24,5 +24,6 @@ module.exports.get = () => {
 
 //used collections
 module.exports.collections = {
-    CALL_CHANNEL: "callChannel"
+    CALL_CHANNEL: "callChannel",
+    CONTACTS: "userContacts"
 }

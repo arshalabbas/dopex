@@ -10,6 +10,13 @@ module.exports.run = async (bot, message) => {
     const channel1 = bot.channels.cache.get(message.channel.id);
     const channel2 = bot.channels.cache.get(caller);
 
+    const card = {
+        name: channel2.guild.name,
+        channelID: channel2.id
+    }
+
+    bot.lastContact.set(message.author.id, card);
+
     channel2.send("They took the call **say hello**").then(() => {
         bot.caller.set(channel2.id, channel1.id);
         channel1.send("You took the call... **say hello**");

@@ -17,6 +17,7 @@ module.exports.run = () => {
     client.phone = new Collection();
     client.caller = new Collection();
     client.callConnection = new Collection();
+    client.lastContact = new Collection();
 
     ["commands", "aliases"].forEach(x => client[x] = new Collection());
 
