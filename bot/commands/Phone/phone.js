@@ -1,11 +1,13 @@
 const { MessageEmbed } = require('discord.js');
 const { getAllChannels } = require('../../Database/phoneChannel');
+const { getPrefix } = require('../../Database/prefixes');
 
 const { navigation, util } = require("../../utils/Phone/phoneUI");
 
 const { colors } = require('../../utils/tools');
 
 module.exports.run = async (bot, message) => {
+    const prefix = await getPrefix(message.guild.id) || bot.config.PREFIX;
     const connection = bot.callConnection.get(message.channel.id);
     if (connection) return message.channel.send("You guys are in a call...\n*So can't able to use phone right now...*");
     var status = false;
@@ -78,7 +80,7 @@ module.exports.run = async (bot, message) => {
     await phoneUI.react("📞");
 
     const filter = (reaction, user) => user.id !== bot.user.id;
-    const collector = phoneUI.createReactionCollector(filter);
+    const collector = phoneUI.createReactionCollector(filter, { time: 60000 });
 
     collector.on('collect', async (reaction, user) => {
         await bot.phone.set(message.author.id, collector);
@@ -128,22 +130,21 @@ module.exports.run = async (bot, message) => {
                 reaction.users.remove(user);
                 const call = navigation("📞");
                 footer();
-                if (call === 'global') {
-                    const allChannels = util.channels.filter(ch => ch.guildID !== message.guild.id);
-                    if (!allChannels.length) return errorFooter("No channels were found");
+                function callFunction(reciever) {
                     const channel1 = bot.channels.cache.get(message.channel.id);
-                    const channel2 = bot.channels.cache.get(allChannels[Math.floor(Math.random() * allChannels.length)].channelID);
+                    const channel2 = bot.channels.cache.get(reciever);
                     status = true;
                     collector.stop();
                     phoneEmb.setTitle("Ringing...");
                     phoneEmb.setDescription(`Calling to ${channel2.guild.name}`);
                     phoneEmb.setFooter("Wait for there responds...");
-                    phoneUI.edit(phoneEmb).then(() => {
+                    phoneUI.edit(phoneEmb).then(async () => {
+                        const callerPrefix = await getPrefix(channel2.guild.id) || bot.config.PREFIX;
                         const recieverEmb = new MessageEmbed()
                             .setAuthor("Dopex Phone")
                             .setTitle("You have a call...")
                             .setDescription(`${channel1.guild.name}\n${channel1.guild.region}`)
-                            .setFooter(`Try pickup command to take the call`);
+                            .setFooter(`Pickup: ${callerPrefix} pickup\nHangup: ${callerPrefix} hangup`);
 
                         channel2.send(recieverEmb).then(() => {
                             bot.caller.set(channel2.id, channel1.id);
@@ -152,7 +153,7 @@ module.exports.run = async (bot, message) => {
                                 return msg.content;
                             }
 
-                            const collect = channel1.createMessageCollector(filter);
+                            const collect = channel1.createMessageCollector(filter, { time: 600000 });
 
                             collect.on('collect', msg => {
                                 const connection = bot.callConnection.get(channel2.id);
@@ -160,8 +161,17 @@ module.exports.run = async (bot, message) => {
                                 bot.callConnection.set(channel1.id, collect);
                                 channel2.send(`**${msg.author.username}**: ${msg.content}`);
                             });
+
+                            collect.on('end', () => {
+                                message.channel.send(`Call Ended\nYou can save this contact by using \`${prefix} save\``);
+                            });
                         });
                     });
+                }
+                if (call === 'global') {
+                    const allChannels = util.channels.filter(ch => ch.guildID !== message.guild.id);
+                    if (!allChannels.length) return errorFooter("No channels were found");
+                    callFunction(allChannels[Math.floor(Math.random() * allChannels.length)].channelID);
                 }
                 break;
             default:

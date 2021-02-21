@@ -1,14 +1,16 @@
 const { MessageEmbed } = require("discord.js");
 const { setChannel, getChannel, updateChannel } = require("../../Database/phoneChannel");
+const { getPrefix } = require("../../Database/prefixes");
 const { colors } = require("../../utils/tools");
 
 module.exports.run = async (bot, message, args) => {
+    const prefix = await getPrefix(message.guild.id) || bot.config.PREFIX;
     var status;
     var update;
     const embed = new MessageEmbed()
         .setTitle("Incoming call channel")
-        .setColor(colors[Math.floor(Math.random() * colors.length)])
-        .setFooter("There is 15 seconds...");
+        .setColor(colors[Math.floor(Math.random() * colors.length)]);
+    embed.setFooter("There is 15 seconds...");
 
     if (!args.length) {
         const channelID = message.channel.id;
@@ -53,19 +55,23 @@ module.exports.run = async (bot, message, args) => {
         collector.on("end", () => {
             if (status === 'cancel') {
                 embed.setDescription("Operation Cancelled");
-                confirm.edit(embed)
+                embed.setFooter("");
+                confirm.edit(embed);
             }
             else if (status === 'done') {
                 if (update) {
                     embed.setDescription(`Channel Updated to <#${channelID}>`);
+                    embed.setFooter(`${prefix} disable, to disable incoming calls!`);
                     confirm.edit(embed);
                 } else {
                     embed.setDescription(`Channel set to <#${channelID}>`);
+                    embed.setFooter(`${prefix} disable, to disable incoming calls!`);
                     confirm.edit(embed);
                 }
             }
             else {
                 embed.setDescription("Times up :(");
+                embed.setFooter("Try again");
                 confirm.edit(embed);
             }
         });
@@ -136,14 +142,17 @@ module.exports.run = async (bot, message, args) => {
             else if (status === 'done') {
                 if (update) {
                     embed.setDescription(`Channel Updated to <#${channelID}>`);
+                    embed.setFooter(`${prefix} disable, to disable incoming calls!`);
                     confirm.edit(embed);
                 } else {
                     embed.setDescription(`Channel set to <#${channelID}>`);
+                    embed.setFooter(`${prefix} disable, to disable incoming calls!`);
                     confirm.edit(embed);
                 }
             }
             else {
                 embed.setDescription("Times up :(");
+                embed.setFooter("Try again");
                 confirm.edit(embed);
             }
         });

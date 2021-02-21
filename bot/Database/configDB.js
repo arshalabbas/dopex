@@ -5,7 +5,7 @@ const mongoClient = require('mongodb').MongoClient;
 const state = {
     db: null
 }
-
+//connection
 module.exports.connect = (done) => {
     const url = MONGO_DB;
     const dbname = "dopex";
@@ -17,6 +17,12 @@ module.exports.connect = (done) => {
     });
 }
 
+//to get the db
 module.exports.get = () => {
     return state.db;
+}
+
+//used collections
+module.exports.collections = {
+    CALL_CHANNEL: "callChannel"
 }

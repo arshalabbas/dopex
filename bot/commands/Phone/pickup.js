@@ -1,4 +1,7 @@
-module.exports.run = (bot, message) => {
+const { getPrefix } = require("../../Database/prefixes");
+
+module.exports.run = async (bot, message) => {
+    const prefix = await getPrefix(message.guild.id) || bot.config.PREFIX;
     const connection = bot.callConnection.get(message.channel.id);
     if (connection) return message.channel.send("You guys already in a call");
     const caller = bot.caller.get(message.channel.id);
@@ -13,13 +16,17 @@ module.exports.run = (bot, message) => {
 
         const filter = msg => {
             if (msg.author.bot) return;
-            return  msg.content;
+            return msg.content;
         }
-        const collector = channel1.createMessageCollector(filter);
+        const collector = channel1.createMessageCollector(filter, { time: 600000 });
         bot.callConnection.set(channel1.id, collector);
 
         collector.on('collect', msg => {
             channel2.send(`**${msg.author.username}**: ${msg.content}`);
+        });
+
+        collector.on('end', () => {
+            message.channel.send(`Call Ended\nYou can save this contact by using \`${prefix} save\``);
         });
     });
 }

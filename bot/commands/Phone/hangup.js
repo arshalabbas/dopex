@@ -5,8 +5,8 @@ module.exports.run = (bot, message) => {
     const callerConnection = bot.callConnection.get(caller);
 
     message.channel.send("You hang up the call").then(() => {
-        connection.stop();
-        callerConnection.stop();
+        if (connection) connection.stop();
+        if (callerConnection) callerConnection.stop();
         bot.callConnection.delete(message.channel.id);
         bot.callConnection.delete(caller);
         const channel2 = bot.channels.cache.get(caller);
@@ -18,5 +18,6 @@ module.exports.run = (bot, message) => {
 module.exports.help = {
     name: "hangup",
     description: "hang up the the call",
+    aliases: ["end"],
     category: "Phone"
 }
