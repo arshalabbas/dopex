@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { getAllChannels } = require('../../Database/phoneChannel');
+const {  } = require('../../Database/userContacts');
 const { getPrefix } = require('../../Database/prefixes');
 
 const { navigation, util } = require("../../utils/Phone/phoneUI");
@@ -11,10 +12,8 @@ module.exports.run = async (bot, message) => {
     const connection = bot.callConnection.get(message.channel.id);
     if (connection) return message.channel.send("You guys are in a call...\n*So can't able to use phone right now...*");
     var status = false;
-    util.channels = await getAllChannels();
     const active = await bot.phone.get(message.author.id);
     if (active) active.stop();
-    util.client = bot;
     const phoneEmb = new MessageEmbed()
         .setAuthor("Dopex Phone")
         .setColor(colors[Math.floor(Math.random() * colors.length)]);
@@ -160,13 +159,11 @@ module.exports.run = async (bot, message) => {
                                 if (msg.author.bot) return;
                                 return msg.content;
                             }
-
                             const collect = channel1.createMessageCollector(filter, { time: 600000 });
-
+                            bot.callConnection.set(channel1.id, collect);
                             collect.on('collect', msg => {
                                 const connection = bot.callConnection.get(channel2.id);
                                 if (!connection) return;
-                                bot.callConnection.set(channel1.id, collect);
                                 channel2.send(`**${msg.author.username}**: ${msg.content}`);
                             });
 
@@ -177,7 +174,8 @@ module.exports.run = async (bot, message) => {
                     });
                 }
                 if (call === 'global') {
-                    const allChannels = util.channels.filter(ch => ch.guildID !== message.guild.id);
+                    const dbAllChannels = await getAllChannels();
+                    const allChannels = dbAllChannels.filter(ch => ch.guildID !== message.guild.id);
                     if (!allChannels.length) return errorFooter("No channels were found");
                     callFunction(allChannels[Math.floor(Math.random() * allChannels.length)].channelID);
                 }

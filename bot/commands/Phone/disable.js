@@ -6,12 +6,11 @@ const { colors } = require("../../utils/tools");
 module.exports.run = async (bot, message) => {
     const prefix = await getPrefix(message.guild.id) || bot.config.PREFIX;
     const channel = getChannel(message.guild.id);
-    console.log(channel);
     if (!channel) {
         const embed = new MessageEmbed()
         .setTitle("Bruhh...")
         .setDescription("Didn't added a incoming channel yet")
-        .setColor(colors[Math.floor(Math.random() * colors,length)])
+        .setColor(colors[Math.floor(Math.random() * colors.length)])
         .setFooter(`${prefix} set, to set new channel`);
 
         message.channel.send(embed);

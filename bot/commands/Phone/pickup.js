@@ -26,6 +26,9 @@ module.exports.run = async (bot, message) => {
             return msg.content;
         }
         const collector = channel1.createMessageCollector(filter, { time: 600000 });
+        bot.emit("pickup", done => {
+            done(true);
+        });
         bot.callConnection.set(channel1.id, collector);
 
         collector.on('collect', msg => {

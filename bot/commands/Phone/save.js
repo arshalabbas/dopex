@@ -5,9 +5,9 @@ module.exports.run = async (bot, message) => {
     if (!card) return message.reply("Sorry, I can't able to fetch the last call\n*Make a call and try again*");
 
     await saveContact(message.author.id, card).then(() => {
-        message.reply("saved...");
+        message.reply("💾 Contact saved to your phone!");
     }).catch(() => {
-        message.reply("this contact already in your contact list");
+        message.reply("❌ This contact already in your contact list");
     });
 }
 
