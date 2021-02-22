@@ -5,13 +5,6 @@ module.exports.menu = [
     "📴 Power off"
 ];
 
-module.exports.contacts = [
-    "Contact 1",
-    "Contact 2",
-    "Contact 3",
-    "Contact 4"
-];
-
 module.exports.contactOptions = [
     "✏️ Rename",
     "🗑️ Delete"

@@ -1,4 +1,4 @@
-const { menu, contactOptions, messages, msgOptions, contacts } = require('./sections');
+const { menu, contactOptions, messages, msgOptions } = require('./sections');
 
 var index = 0;
 var stages = ["Menu"];
@@ -11,8 +11,8 @@ module.exports.util = util;
 function contactsList() {
     let channelList = [];
     channelList.push("🌐 Global call");
-    contacts.forEach(ch => {
-        channelList.push(ch);
+    util.contacts.forEach(ch => {
+        channelList.push(ch.name);
     });
     return channelList;
 }
@@ -133,6 +133,9 @@ function navigation(button) {
         if (current !== "Contacts") return;
         if (index === 0) {
             return "global";
+        }
+        else {
+            return index - 1;
         }
     }
 }

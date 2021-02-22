@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { getAllChannels } = require('../../Database/phoneChannel');
-const {  } = require('../../Database/userContacts');
+const { getContact } = require('../../Database/userContacts');
 const { getPrefix } = require('../../Database/prefixes');
 
 const { navigation, util } = require("../../utils/Phone/phoneUI");
@@ -14,6 +14,7 @@ module.exports.run = async (bot, message) => {
     var status = false;
     const active = await bot.phone.get(message.author.id);
     if (active) active.stop();
+    util.contacts = await getContact(message.author.id);
     const phoneEmb = new MessageEmbed()
         .setAuthor("Dopex Phone")
         .setColor(colors[Math.floor(Math.random() * colors.length)]);
@@ -177,7 +178,23 @@ module.exports.run = async (bot, message) => {
                     const dbAllChannels = await getAllChannels();
                     const allChannels = dbAllChannels.filter(ch => ch.guildID !== message.guild.id);
                     if (!allChannels.length) return errorFooter("No channels were found");
-                    callFunction(allChannels[Math.floor(Math.random() * allChannels.length)].channelID);
+                    const channelID = allChannels[Math.floor(Math.random() * allChannels.length)].channelID;
+                    callFunction(channelID);
+                }
+                else {
+                    const dbAllChannels = await getAllChannels();
+                    const allChannels = util.contacts;
+                    const channelID = allChannels[call].channelID;
+                    const check = dbAllChannels.some(ch => ch.channelID === channelID);
+                    if (channelID === message.channel.id) {
+                        errorFooter("You can't call to this contact\nBecause you are in this location!");
+                        return;
+                    }
+                    if (!check) {
+                        errorFooter("They removed this channel for incoming calls");
+                        return;
+                    }
+                    callFunction(channelID);
                 }
                 break;
             default:

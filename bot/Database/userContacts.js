@@ -21,5 +21,18 @@ module.exports = {
                 });
             }
         });
+    },
+    getContact: (userID) => {
+        return new Promise(async (resolve, reject) => {
+            const user = await db.get().collection(db.collections.CONTACTS).findOne({ userID: userID });
+            resolve(user.contacts);
+        });
+    },
+    deleteContact: (userID, channelID) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(db.collections.CONTACTS).updateOne({ userID: userID }, {
+                $pull: { contacts: { channelID: channelID } }
+            });
+        });
     }
 }
