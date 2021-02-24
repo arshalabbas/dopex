@@ -1,4 +1,5 @@
-const { menu, contactOptions, messages, msgOptions } = require('./sections');
+const { menu, contactOptions, messages, msgOptions, confirm } = require('./sections');
+const { deleteContact } = require('../../Database/userContacts');
 
 var index = 0;
 var stages = ["Menu"];
@@ -6,6 +7,8 @@ var stage = menu;
 var util = {};
 var sub = false;
 var options;
+var optionType;
+var select;
 module.exports.util = util;
 
 function contactsList() {
@@ -24,12 +27,13 @@ function checkStage() {
         stage = menu;
     }
     else if (current === 'Contacts') {
-        sub = true;
+        sub = "subMenu";
         const contacts = contactsList();
         stage = contacts;
+        console.log(contacts);
     }
     else if (current === 'Messages') {
-        sub = true;
+        sub = "subMenu";
         stage = messages;
     }
     else if (current === 'Switched off') {
@@ -38,13 +42,18 @@ function checkStage() {
         util.collector.stop();
     }
     else if (current === 'Options') {
-        sub = false;
+        sub = 'confirm';
         stage = options;
+    }
+    else if (current === 'Confirm') {
+        select = index;
+        sub = 'end';
+        stage = confirm;
     }
     return current;
 }
 
-function pass(index) {
+async function pass(index) {
     if (!sub) {
         if (index === 0) {
             stages.push("Contacts");
@@ -57,16 +66,40 @@ function pass(index) {
         }
     }
 
-    else if (sub) {
+    else if (sub === 'subMenu') {
         const checker = stages[stages.length - 1];
         if (checker === 'Contacts') {
             if (index === 0) return;
             options = contactOptions;
+            optionType = "call";
+            console.log(stage);
         }
         else if (checker === 'Messages') {
             options = msgOptions;
+            optionType = "msg";
         }
         stages.push("Options");
+    }
+    else if (sub === 'confirm') {
+        // if (optionType === 'call' && index == 0) {
+
+        // }
+        if (optionType === "call" && index == 1) {
+            stages.push("Confirm");
+        }
+    }
+    else if (sub === 'end') {
+        if (index == 0) {
+            await deleteContact(util.message.author.id, util.contacts[select - 1]).then(() => {
+                sub = false;
+                stages.pop();
+                stages.pop();
+                const contacts = contactsList();
+                stage = contacts;
+                console.log(sub);
+                console.log(stages);
+            });
+        }
     }
 
 }

@@ -14,6 +14,7 @@ module.exports.run = async (bot, message) => {
     var status = false;
     const active = await bot.phone.get(message.author.id);
     if (active) active.stop();
+    util.message = message;
     util.contacts = await getContact(message.author.id);
     const phoneEmb = new MessageEmbed()
         .setAuthor("Dopex Phone")
@@ -55,14 +56,16 @@ module.exports.run = async (bot, message) => {
         phoneEmb.setFooter(`📶 ${ping}ms  🕓 ${time}  📅 ${date}`, message.author.displayAvatarURL());
     }
 
-    function errorFooter(errorMessage) {
+    function errorFooter(errorMessage, time = 2500) {
         phoneEmb.setFooter(errorMessage, message.author.displayAvatarURL());
         phoneUI.edit(phoneEmb);
         setTimeout(() => {
             footer();
             phoneUI.edit(phoneEmb);
-        }, 2500);
+        }, time);
     }
+
+    module.exports.errorFooter = errorFooter;
 
     footer();
     const phoneUI = await message.channel.send(phoneEmb);
@@ -150,16 +153,32 @@ module.exports.run = async (bot, message) => {
                         const callerPrefix = await getPrefix(channel2.guild.id) || bot.config.PREFIX;
                         const recieverEmb = new MessageEmbed()
                             .setAuthor("Dopex Phone")
-                            .setTitle("You have a call...")
-                            .setDescription(`${channel1.guild.name}\n${channel1.guild.region}`)
-                            .setFooter(`Pickup: ${callerPrefix} pickup\nHangup: ${callerPrefix} hangup`);
+                            .setDescription(`${channel1.guild.name}\n${channel1.guild.region}`);
+                        recieverEmb.setTitle("You have a call...");
+                        recieverEmb.setFooter(`Pickup: ${callerPrefix} pickup\nHangup: ${callerPrefix} hangup`);
 
-                        channel2.send(recieverEmb).then(() => {
-                            bot.caller.set(channel2.id, channel1.id);
-                            const filter = msg => {
-                                if (msg.author.bot) return;
-                                return msg.content;
-                            }
+                        const recieverMsg = await channel2.send(recieverEmb);
+                        bot.caller.set(channel2.id, channel1.id);
+                        const filter = msg => {
+                            if (msg.author.bot) return;
+                            return msg.content;
+                        }
+                        const pickupTime = setTimeout(() => {
+                            bot.caller.delete(channel2.id);
+                            phoneEmb.setTitle("Call Ended");
+                            phoneEmb.setDescription("No responds from the server");
+                            phoneEmb.setFooter("They didn't take the call in time :(");
+                            phoneUI.edit(phoneEmb);
+                            recieverEmb.setTitle("Missed a call");
+                            recieverEmb.setFooter("Check your message!");
+                            recieverMsg.edit(recieverEmb);
+                            return;
+                        }, 10000);
+                        bot.on('pickup', () => {
+                            clearTimeout(pickupTime);
+                            phoneEmb.setTitle("On Call");
+                            phoneEmb.setFooter("They took the call :)");
+                            phoneUI.edit(phoneEmb);
                             const collect = channel1.createMessageCollector(filter, { time: 600000 });
                             bot.callConnection.set(channel1.id, collect);
                             collect.on('collect', msg => {
@@ -187,7 +206,7 @@ module.exports.run = async (bot, message) => {
                     const channelID = allChannels[call].channelID;
                     const check = dbAllChannels.some(ch => ch.channelID === channelID);
                     if (channelID === message.channel.id) {
-                        errorFooter("You can't call to this contact\nBecause you are in this location!");
+                        errorFooter("You can't call to this contact\nBecause you are in this location!", 3000);
                         return;
                     }
                     if (!check) {

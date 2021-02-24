@@ -28,11 +28,13 @@ module.exports = {
             resolve(user.contacts);
         });
     },
-    deleteContact: (userID, channelID) => {
+    deleteContact: (userID, card) => {
         return new Promise(async (resolve, reject) => {
             await db.get().collection(db.collections.CONTACTS).updateOne({ userID: userID }, {
-                $pull: { contacts: { channelID: channelID } }
-            });
+                $pull: { contacts: card }
+            }).then(() => {
+                resolve();
+            })
         });
     }
 }

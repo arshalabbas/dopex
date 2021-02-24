@@ -14,6 +14,11 @@ module.exports.msgOptions = [
     "🗑️ Delete"
 ];
 
+module.exports.confirm = [
+    "✔️ Done",
+    "🚫 Cancel"
+];
+
 module.exports.messages = [
     "You missed a call from Contact 2",
     "You missed a call from Contact 4"
