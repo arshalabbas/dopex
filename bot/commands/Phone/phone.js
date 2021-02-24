@@ -14,6 +14,7 @@ module.exports.run = async (bot, message) => {
     var status = false;
     const active = await bot.phone.get(message.author.id);
     if (active) active.stop();
+    util.client = bot;
     util.message = message;
     util.contacts = await getContact(message.author.id);
     const phoneEmb = new MessageEmbed()
@@ -137,6 +138,12 @@ module.exports.run = async (bot, message) => {
                     const channel1 = bot.channels.cache.get(message.channel.id);
                     const channel2 = bot.channels.cache.get(reciever);
 
+                    const checkCaller = bot.caller.get(channel2.id);
+                    if (checkCaller) {
+                        errorFooter("Calling to someone else\nTry again later");
+                        return;
+                    }
+
                     const card = {
                         name: channel2.guild.name,
                         channelID: channel2.id
@@ -153,6 +160,7 @@ module.exports.run = async (bot, message) => {
                         const callerPrefix = await getPrefix(channel2.guild.id) || bot.config.PREFIX;
                         const recieverEmb = new MessageEmbed()
                             .setAuthor("Dopex Phone")
+                            .setColor(colors[Math.floor(Math.random() * colors.length)])
                             .setDescription(`${channel1.guild.name}\n${channel1.guild.region}`);
                         recieverEmb.setTitle("You have a call...");
                         recieverEmb.setFooter(`Pickup: ${callerPrefix} pickup\nHangup: ${callerPrefix} hangup`);
@@ -173,7 +181,7 @@ module.exports.run = async (bot, message) => {
                             recieverEmb.setFooter("Check your message!");
                             recieverMsg.edit(recieverEmb);
                             return;
-                        }, 10000);
+                        }, 30000);
                         bot.on('pickup', () => {
                             clearTimeout(pickupTime);
                             phoneEmb.setTitle("On Call");
@@ -205,12 +213,17 @@ module.exports.run = async (bot, message) => {
                     const allChannels = util.contacts;
                     const channelID = allChannels[call].channelID;
                     const check = dbAllChannels.some(ch => ch.channelID === channelID);
+                    const deleteCheck = bot.channels.cache.get(channelID);
                     if (channelID === message.channel.id) {
                         errorFooter("You can't call to this contact\nBecause you are in this location!", 3000);
                         return;
                     }
                     if (!check) {
                         errorFooter("They removed this channel for incoming calls");
+                        return;
+                    }
+                    if (!deleteCheck || deleteCheck.deleted) {
+                        errorFooter("This channel is not available");
                         return;
                     }
                     callFunction(channelID);

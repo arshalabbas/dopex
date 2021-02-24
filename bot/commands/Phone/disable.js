@@ -5,7 +5,7 @@ const { colors } = require("../../utils/tools");
 
 module.exports.run = async (bot, message) => {
     const prefix = await getPrefix(message.guild.id) || bot.config.PREFIX;
-    const channel = getChannel(message.guild.id);
+    const channel = await getChannel(message.guild.id);
     if (!channel) {
         const embed = new MessageEmbed()
         .setTitle("Bruhh...")

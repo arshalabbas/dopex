@@ -30,7 +30,6 @@ function checkStage() {
         sub = "subMenu";
         const contacts = contactsList();
         stage = contacts;
-        console.log(contacts);
     }
     else if (current === 'Messages') {
         sub = "subMenu";
@@ -46,7 +45,7 @@ function checkStage() {
         stage = options;
     }
     else if (current === 'Confirm') {
-        select = index;
+        select = index - 1;
         sub = 'end';
         stage = confirm;
     }
@@ -72,7 +71,6 @@ async function pass(index) {
             if (index === 0) return;
             options = contactOptions;
             optionType = "call";
-            console.log(stage);
         }
         else if (checker === 'Messages') {
             options = msgOptions;
@@ -90,15 +88,15 @@ async function pass(index) {
     }
     else if (sub === 'end') {
         if (index == 0) {
-            await deleteContact(util.message.author.id, util.contacts[select - 1]).then(() => {
-                sub = false;
-                stages.pop();
-                stages.pop();
-                const contacts = contactsList();
-                stage = contacts;
-                console.log(sub);
-                console.log(stages);
-            });
+            console.log(`index: ${index}`);
+            console.log(`select: ${select}`);
+            await deleteContact(util.message.author.id, util.contacts[select]);
+            const command = await util.message.client.commands.get("phone");
+            command.run(util.message.client, util.message);
+        }
+        else if (index == 1) {
+            stages.pop();
+            sub === 'confirm';
         }
     }
 
@@ -124,6 +122,7 @@ function navigation(button) {
         stage = menu;
         sub = false;
         options = "";
+        select = "";
         const hover = hoverEffect(index);
         return hover.join("\n\n");
     }

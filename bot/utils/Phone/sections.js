@@ -15,7 +15,7 @@ module.exports.msgOptions = [
 ];
 
 module.exports.confirm = [
-    "✔️ Done",
+    "✔️ Ok",
     "🚫 Cancel"
 ];
 
