@@ -45,7 +45,7 @@ function checkStage() {
         stage = options;
     }
     else if (current === 'Confirm') {
-        select = index - 1;
+        select = index - 1; 
         sub = 'end';
         stage = confirm;
     }

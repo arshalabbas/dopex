@@ -25,6 +25,10 @@ module.exports = {
     getContact: (userID) => {
         return new Promise(async (resolve, reject) => {
             const user = await db.get().collection(db.collections.CONTACTS).findOne({ userID: userID });
+            if (!user) {
+                resolve([]);
+                return;
+            }
             resolve(user.contacts);
         });
     },
