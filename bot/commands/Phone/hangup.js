@@ -19,5 +19,5 @@ module.exports.help = {
     name: "hangup",
     description: "hang up the the call",
     aliases: ["end"],
-    category: "Phone"
+    category: "Developer"
 }

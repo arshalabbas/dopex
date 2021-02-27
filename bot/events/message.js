@@ -1,6 +1,7 @@
 const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const { getPrefix } = require('../Database/prefixes');
+const { OWNER } = require('../utils/keysExport');
 
 module.exports = async message => {
     const content = message.content.toLowerCase();
@@ -39,6 +40,8 @@ module.exports = async message => {
             return message.reply("🚫 You can't use this command.");
         }
     }
+
+    if (command.help.category === 'Developers' && message.author.id !== OWNER) return;
 
     if (command) command.run(message.client, message, args);
 }

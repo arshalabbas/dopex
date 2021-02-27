@@ -34,5 +34,5 @@ module.exports.help = {
     description: "disable the incoming call",
     aliases: ["remove"],
     permissions: ["MANAGE_GUILD"],
-    category: "Phone"
+    category: "Developer"
 }

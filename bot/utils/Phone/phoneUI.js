@@ -9,6 +9,7 @@ var sub = false;
 var options;
 var optionType;
 var select;
+
 module.exports.util = util;
 
 function contactsList() {
@@ -45,9 +46,21 @@ function checkStage() {
         stage = options;
     }
     else if (current === 'Confirm') {
-        select = index - 1; 
         sub = 'end';
         stage = confirm;
+    }
+    else if (current === 'Delete') {
+        deleteContact(util.message.author.id, util.contacts[select]).then(async () => {
+            const command = await util.message.client.commands.get("phone");
+            command.run(util.message.client, util.message);
+        });
+    }
+    else if (current === 'Rename') {
+        stage = ["send the name to rename"];
+        // const filter = (msg.content) => {
+            
+        // }
+        const collector = util.message.channel.createMessageCollector();
     }
     return current;
 }
@@ -79,20 +92,17 @@ async function pass(index) {
         stages.push("Options");
     }
     else if (sub === 'confirm') {
-        // if (optionType === 'call' && index == 0) {
-
-        // }
+        select = index - 1;
+        if (optionType === 'call' && index == 0) {
+            stages.push("Rename");
+        }
         if (optionType === "call" && index == 1) {
             stages.push("Confirm");
         }
     }
     else if (sub === 'end') {
         if (index == 0) {
-            console.log(`index: ${index}`);
-            console.log(`select: ${select}`);
-            await deleteContact(util.message.author.id, util.contacts[select]);
-            const command = await util.message.client.commands.get("phone");
-            command.run(util.message.client, util.message);
+            stages.push("Delete");
         }
         else if (index == 1) {
             stages.pop();

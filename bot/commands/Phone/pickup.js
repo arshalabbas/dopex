@@ -15,7 +15,7 @@ module.exports.run = async (bot, message) => {
         channelID: channel2.id
     }
 
-    bot.lastContact.set(message.author.id, card);
+    bot.lastContact.set(message.channel.id, card);
 
     channel2.send("They took the call **say hello**").then(() => {
         bot.caller.set(channel2.id, channel1.id);
@@ -45,5 +45,5 @@ module.exports.help = {
     name: "pickup",
     description: "take the incoming call",
     aliases: ["take"],
-    category: "Phone"
+    category: "Developer"
 }

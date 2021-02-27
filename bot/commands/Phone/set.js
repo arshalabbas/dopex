@@ -165,5 +165,5 @@ module.exports.help = {
     usage: "(channel)",
     aliases: ["channel", "ch"],
     permissions: ["MANAGE_GUILD"],
-    category: "Phone"
+    category: "Developer"
 }

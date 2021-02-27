@@ -68,8 +68,11 @@ module.exports.run = async (bot, message) => {
 
     module.exports.errorFooter = errorFooter;
 
+    message.channel.startTyping();
     footer();
     const phoneUI = await message.channel.send(phoneEmb);
+    util.embed = phoneEmb;
+    util.ui = phoneUI;
     var items = navigation();
     phoneEmb.setTitle("Menu");
     phoneEmb.setDescription(items);
@@ -85,7 +88,7 @@ module.exports.run = async (bot, message) => {
 
     const filter = (reaction, user) => user.id !== bot.user.id;
     const collector = phoneUI.createReactionCollector(filter, { time: 60000 });
-
+    message.channel.stopTyping();
     collector.on('collect', async (reaction, user) => {
         await bot.phone.set(message.author.id, collector);
         util.collector = collector;
@@ -149,7 +152,7 @@ module.exports.run = async (bot, message) => {
                         channelID: channel2.id
                     }
 
-                    bot.lastContact.set(message.author.id, card);
+                    bot.lastContact.set(message.channel.id, card);
 
                     status = true;
                     collector.stop();
@@ -248,5 +251,5 @@ module.exports.run = async (bot, message) => {
 module.exports.help = {
     name: "phone",
     description: "A dopex phone with calling feature",
-    category: "Phone"
+    category: "Developer"
 }
